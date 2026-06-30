@@ -21,6 +21,11 @@
       if (name) switchTab(name);
     });
     document.getElementById('print-btn').addEventListener('click', function(){ window.print(); });
+    document.getElementById('add-unit-shortcut').addEventListener('click', function(){
+      switchTab('units');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      var t = document.getElementById('unit-tenant'); if (t) t.focus();
+    });
 
     initOwners();
     initUnits();

@@ -25,7 +25,7 @@ function buildInvoices(y, m){
     var g = computeGst(u.rent, u.rate, inter);
     var prefix = u.prefix || (owner.name || 'INV').replace(/[^A-Za-z]/g, '').slice(0, 2).toUpperCase() || 'INV';
     grp.rows.push({
-      tenant: u.tenant, tgstin: u.tgstin, property: u.property,
+      unitId: u.id, tenant: u.tenant, tgstin: u.tgstin, property: u.property,
       invoiceNo: prefix + '/' + String(grp.seq).padStart(2, '0') + '/' + fy,
       taxable: g.taxable, cgst: g.cgst, sgst: g.sgst, igst: g.igst,
       totalTax: g.totalTax, total: g.total, rate: g.rate, inter: inter
@@ -87,7 +87,9 @@ function ownerCard(o, rows){
   var body = rows.map(function(r){
     return '<tr><td>' + escapeHtml(r.tenant) + '<div class="inv">' + r.invoiceNo +
       (r.tgstin ? ' · ' + escapeHtml(r.tgstin) : '') + '</div></td>' +
-      '<td>' + inr(r.taxable) + '</td><td>' + inr(r.cgst) + '</td><td>' + inr(r.sgst) + '</td>' +
+      '<td class="rent-cell"><input class="cell-rent" type="number" min="0" step="500" value="' +
+        r.taxable + '" data-unit-rent="' + r.unitId + '" aria-label="Edit rent for ' + escapeHtml(r.tenant) + '" /></td>' +
+      '<td>' + inr(r.cgst) + '</td><td>' + inr(r.sgst) + '</td>' +
       (anyInter ? '<td>' + inr(r.igst) + '</td>' : '') +
       '<td>' + inr(r.total) + '</td></tr>';
   }).join('');
@@ -106,4 +108,23 @@ function ownerCard(o, rows){
       '</tbody><tfoot>' + foot + '</tfoot></table></div>' +
     '<div class="file-line">' + fileLine + '</div></div>';
 }
+
+// Inline rent editing: change a rent right on the dashboard and the unit is
+// updated in the store, then the figures recompute. Delegated on the persistent
+// container so it survives re-renders; uses 'change' so focus isn't lost mid-typing.
+function initDashboardInlineEdit(){
+  var host = document.getElementById('dashboard-body');
+  if (!host) return;
+  host.addEventListener('change', function(e){
+    var id = e.target.getAttribute('data-unit-rent');
+    if (!id) return;
+    var u = getUnit(id);
+    if (!u) return;
+    u.rent = Number(e.target.value) || 0;
+    upsertUnit(u);
+    renderDashboard();
+    if (typeof renderUnits === 'function') renderUnits();
+  });
+}
 window.renderDashboard = renderDashboard;
+window.initDashboardInlineEdit = initDashboardInlineEdit;

@@ -50,3 +50,8 @@ table.reg .inv{color:var(--muted);font-size:.8rem;}
 .listcard .meta{font-size:.85rem;color:var(--muted);}
 .badge{display:inline-block;background:var(--soft);color:var(--teal-dark);border-radius:999px;
   padding:1px 9px;font-size:.75rem;font-weight:700;margin-left:6px;}
+td.rent-cell{padding:4px 6px;}
+input.cell-rent{width:96px;text-align:right;padding:5px 7px;border:1px solid var(--line);
+  border-radius:7px;font:inherit;font-variant-numeric:tabular-nums;background:#fffdf7;}
+input.cell-rent:hover{border-color:var(--gold);}
+input.cell-rent:focus{outline:2px solid var(--gold);outline-offset:1px;background:#fff;}

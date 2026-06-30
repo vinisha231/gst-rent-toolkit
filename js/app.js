@@ -26,6 +26,7 @@
     initUnits();
     initCalculator();
     initDataTab();
+    initDashboardInlineEdit();
 
     renderOwners();
     renderUnits();

@@ -85,7 +85,7 @@ function ownerCard(o, rows){
   var head = '<tr><th>Tenant / Invoice</th><th>Taxable</th><th>CGST</th><th>SGST</th>' +
              (anyInter ? '<th>IGST</th>' : '') + '<th>Gross</th></tr>';
   var body = rows.map(function(r){
-    return '<tr><td>' + escapeHtml(r.tenant) + '<div class="inv">' + r.invoiceNo +
+    return '<tr><td>' + escapeHtml(r.tenant) + '<div class="inv">' + escapeHtml(r.invoiceNo) +
       (r.tgstin ? ' · ' + escapeHtml(r.tgstin) : '') + '</div></td>' +
       '<td class="rent-cell"><input class="cell-rent" type="number" min="0" step="500" value="' +
         r.taxable + '" data-unit-rent="' + r.unitId + '" aria-label="Edit rent for ' + escapeHtml(r.tenant) + '" /></td>' +
